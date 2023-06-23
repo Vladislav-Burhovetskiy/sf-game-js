@@ -43,3 +43,11 @@
   line-height: 1;
   cursor: pointer;
 }
+
+.modal-winner-img {
+  height: 200px;
+}
+
+.modal-winner-name {
+  color: black;
+}
