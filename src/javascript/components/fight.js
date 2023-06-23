@@ -57,14 +57,10 @@ export async function fight(firstFighter, secondFighter) {
         function handleKeyDown(event) {
             const key = event.code;
 
-            if (firstFighterIsBlock || secondFighterIsBlock) {
-                return;
-            }
-
-            if (key === controls.PlayerOneAttack && !secondFighter.isBlock) {
+            if (key === controls.PlayerOneAttack && !secondFighterIsBlock && !firstFighterIsBlock) {
                 const damage = getDamage(firstFighter, secondFighter);
                 secondFighterHealth -= damage;
-            } else if (key === controls.PlayerTwoAttack && !firstFighter.isBlock) {
+            } else if (key === controls.PlayerTwoAttack && !firstFighterIsBlock && !secondFighterIsBlock) {
                 const damage = getDamage(secondFighter, firstFighter);
                 firstFighterHealth -= damage;
             } else if (key === controls.PlayerOneBlock) {
