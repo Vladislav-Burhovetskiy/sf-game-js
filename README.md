@@ -1,4 +1,4 @@
-# Street Fichter game
+# Street Fighter game
 I added the following functionality:
 - selection of fighters;
 - receiving detailed information about the soldier;
