@@ -7,8 +7,8 @@ I added the following functionality:
 - blocking hits using D and L keys;
 - Health-bars displaying the state of health of fighters;
 - modal window with information about the winner;
-# P.S.: 
-- fighters don't have an animation to move (hit, block), but you will see on Health-bar that functionality works well!
+## 💡 PS 
+Fighters don't have an animation to move (hit, block), but you will see on Health-bar that functionality works well!
 
 ## 🏃‍♂️ Simple start
 
