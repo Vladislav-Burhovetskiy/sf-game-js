@@ -1,4 +1,12 @@
-# JS for everyone
+# Street Fichter game
+I added the following functionality:
+- selection of fighters;
+- receiving detailed information about the soldier;
+- the ability to hit with the A and J keys;
+- the ability to hit a superHit once per 10 seconds, using QWE and POI keys;
+- blocking hits using D and L keys;
+- Health-bars displaying the state of health of fighters;
+- modal window with information about the winner;
 
 ## 🏃‍♂️ Simple start
 
