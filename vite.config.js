@@ -5,7 +5,8 @@ const config = () => {
         server: {
             host: 'localhost',
             port: 8000
-        }
+        },
+        base: '/sf-game-js/'
     });
 };
 

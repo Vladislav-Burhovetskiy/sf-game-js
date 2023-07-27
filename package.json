@@ -1,5 +1,5 @@
 {
-    "name": "street-fighter",
+    "name": "sf-game-js",
     "engines": {
         "node": ">=16",
         "npm": ">=8"
