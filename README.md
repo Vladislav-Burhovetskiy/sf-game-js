@@ -3,10 +3,11 @@ I added the following functionality:
 - selection of fighters;
 - receiving detailed information about the soldier;
 - the ability to hit with the A and J keys;
-- the ability to hit a superHit once per 10 seconds, using QWE and POI keys;
+- the ability to hit a superHit once per 10 seconds, using QWE and UIO keys;
 - blocking hits using D and L keys;
 - Health-bars displaying the state of health of fighters;
 - modal window with information about the winner;
+P.S.: fighters don't have animation to move (hit, block), but you will see on Health-bar that functionality works good!
 
 ## 🏃‍♂️ Simple start
 
