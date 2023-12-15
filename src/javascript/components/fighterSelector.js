@@ -14,6 +14,7 @@ export async function getFighterInfo(fighterId) {
         fighterInfo = await fightersService.getFighterDetails(fighterId);
         fighterDetailsMap.set(fighterId, fighterInfo);
     }
+
     return fighterInfo;
 }
 

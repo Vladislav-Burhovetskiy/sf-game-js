@@ -5,19 +5,54 @@
 }
 
 .fighter-preview___right {
+  position: relative;
   align-items: flex-end;
-  color: white;
 }
 
 .fighter-preview___right img {
+  align-items: flex-end;
   transform: scale(-1, 1);
 }
 
 .fighter-preview___left {
+  position: relative;
   align-items: flex-start;
-  color: #ebd759;
 }
 
 .fighter-preview___img {
   height: 200px;
+}
+
+.fighter_preview__details-container {
+  color: #ffdfa7;
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px black;
+  box-shadow: 1px 1px 10px grey;
+  padding: 15px 25px;
+}
+
+.fighter_preview__details-container span {
+  color: white;
+  font-size: 1.2rem;
+}
+
+.fighter_preview__name {
+  position: absolute;
+  color: red;
+  background: radial-gradient(circle, hsla(0, 98%, 50%, 0.1) 56%, hsla(180, 3%, 8%, 1) 100%);
+  font-weight: bold;
+  font-size: 1.4rem;
+  text-shadow: 2px 1px 0px black;
+  text-transform: uppercase;
+  padding: 0 7px;
+  border-radius: 3px;
+}
+
+.fighter-preview___left .fighter_preview__name {
+  right: 0;
+}
+
+.fighter-preview___right .fighter_preview__name {
+  left: 0;
 }

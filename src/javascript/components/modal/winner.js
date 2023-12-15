@@ -1,21 +1,14 @@
 import showModal from './modal';
-import createElement from '../../helpers/domHelper';
+import { createFighterImage } from '../fighterPreview';
 
 export default function showWinnerModal(fighter) {
     // call showModal function
-    const title = `Winner: ${fighter.name}`;
-    const bodyElement = document.createElement('div');
+    const winnerImageEl = createFighterImage(fighter);
+    winnerImageEl.classList.remove('fighter-preview___img');
+    winnerImageEl.classList.add('modal-winner-img');
 
-    const winnerImage = createElement({
-        tagName: 'img',
-        className: 'modal-winner-img',
-        attributes: {
-            src: fighter.source,
-            alt: fighter.name
-        }
+    showModal({
+        title: `${fighter.name} won!`,
+        bodyElement: winnerImageEl
     });
-
-    bodyElement.append(winnerImage);
-
-    showModal({ title, bodyElement });
 }

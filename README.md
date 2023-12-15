@@ -7,7 +7,10 @@ I added the following functionality:
 - blocking hits using D and L keys;
 - Health-bars displaying the state of health of fighters;
 - modal window with information about the winner;
-P.S.: fighters don't have animation to move (hit, block), but you will see on Health-bar that functionality works good!
+
+## 💡 PS
+
+Fighters don't have animation to move (hit, block), but you will see on Health-bar that functionality works good!
 
 ## 🏃‍♂️ Simple start
 
@@ -25,9 +28,5 @@ OR
 ## 💡 PS
 
 The project has a [Git Hooks](https://www.atlassian.com/git/tutorials/git-hooks), [Prettier](https://prettier.io/) and [Eslint](https://eslint.org/) set up, to validate your JS code.
-
-## 💡 PPS
-
-Please, make sure there are no linter errors in your homework!
 
 ## 🤞 Good luck

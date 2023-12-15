@@ -71,11 +71,6 @@ export default function renderArena(selectedFighters) {
     // todo:
     // - start the fight
     // - when fight is finished show winner
-    fight(selectedFighters[0], selectedFighters[1])
-        .then(winner => {
-            showWinnerModal(winner);
-        })
-        .catch(error => {
-            console.error('Error during fight:', error);
-        });
+    const startFight = fight(selectedFighters[0], selectedFighters[1]);
+    startFight.then(winner => showWinnerModal(winner)).catch(error => console.error('Fight error:', error));
 }

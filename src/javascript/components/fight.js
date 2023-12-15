@@ -1,19 +1,21 @@
 import controls from '../../constants/controls';
 
+function randomNumber() {
+    return Math.random() + 1;
+}
+
 export function getHitPower(fighter) {
     // return hit power
-    const { attack } = fighter;
-    const criticalHitChance = Math.random() * (2 - 1) + 1;
-    const power = attack * criticalHitChance;
-    return power;
+    const criticalHitChance = randomNumber();
+    const powerHit = fighter.attack * criticalHitChance;
+    return powerHit;
 }
 
 export function getBlockPower(fighter) {
     // return block power
-    const { defense } = fighter;
-    const dodgeChance = Math.random() * (2 - 1) + 1;
-    const power = defense * dodgeChance;
-    return power;
+    const dodgeChance = randomNumber();
+    const powerBlock = fighter.defense * dodgeChance;
+    return powerBlock;
 }
 
 export function getDamage(attacker, defender) {
@@ -27,116 +29,134 @@ export function getDamage(attacker, defender) {
 export async function fight(firstFighter, secondFighter) {
     return new Promise(resolve => {
         // resolve the promise with the winner when fight is over
-        let firstFighterHealth = firstFighter.health;
-        let secondFighterHealth = secondFighter.health;
-        let firstFighterIsBlock = firstFighter.isBlock;
-        let secondFighterIsBlock = secondFighter.isBlock;
-        const playerOneCriticalHitCombination = [false, false, false];
-        const playerTwoCriticalHitCombination = [false, false, false];
-        let firstFighterCriticalHit = false;
-        let secondFighterCriticalHit = false;
+        let healthFighter1 = firstFighter.health;
+        let healthFighter2 = secondFighter.health;
+        let isBlockFighter1 = firstFighter.isBlock;
+        let isBlockFighter2 = secondFighter.isBlock;
+        const criticalHitComboPlayer1 = [false, false, false];
+        const criticalHitComboPlayer2 = [false, false, false];
+        let criticalHitFighter1 = false;
+        let criticalHitFighter2 = false;
+
+        const hit = {
+            hitPlayer1Event: () => {
+                if (!isBlockFighter2 && !isBlockFighter1) {
+                    healthFighter2 -= getDamage(firstFighter, secondFighter);
+                }
+            },
+
+            hitPlayer2Event: () => {
+                if (!isBlockFighter2 && !isBlockFighter1) {
+                    healthFighter1 -= getDamage(secondFighter, firstFighter);
+                }
+            },
+
+            criticalHitPlayer1Event: () => {
+                if (
+                    criticalHitComboPlayer1[0] &&
+                    criticalHitComboPlayer1[1] &&
+                    criticalHitComboPlayer1[2] &&
+                    !criticalHitFighter1
+                ) {
+                    healthFighter2 -= 2 * firstFighter.attack;
+                    criticalHitFighter1 = true;
+                    setTimeout(() => {
+                        criticalHitFighter1 = false;
+                    }, 10000);
+                }
+            },
+
+            criticalHitPlayer2Event: () => {
+                if (
+                    criticalHitComboPlayer2[0] &&
+                    criticalHitComboPlayer2[1] &&
+                    criticalHitComboPlayer2[2] &&
+                    !criticalHitFighter2
+                ) {
+                    healthFighter1 -= 2 * secondFighter.attack;
+                    criticalHitFighter2 = true;
+                    setTimeout(() => {
+                        criticalHitFighter2 = false;
+                    }, 10000);
+                }
+            }
+        };
+
+        const keyHandlers = new Map([
+            [controls.PlayerOneAttack, hit.hitPlayer1Event],
+            [controls.PlayerTwoAttack, hit.hitPlayer2Event]
+        ]);
+
+        function addKeyHandlers(controlArray, eventHandler) {
+            controlArray.forEach(controlKey => keyHandlers.set(controlKey, eventHandler));
+        }
+
+        addKeyHandlers(controls.PlayerOneCriticalHitCombination, hit.criticalHitPlayer1Event);
+        addKeyHandlers(controls.PlayerTwoCriticalHitCombination, hit.criticalHitPlayer2Event);
+
+        function hadnlerHit(key) {
+            const handler = keyHandlers.get(key);
+            if (handler) handler();
+        }
+
+        function determineWinner() {
+            resolve(healthFighter1 > healthFighter2 ? firstFighter : secondFighter);
+        }
 
         function updateHealthBars() {
-            const firstFighterHealthBar = document.getElementById('left-fighter-indicator');
-            const secondFighterHealthBar = document.getElementById('right-fighter-indicator');
-            const firstFighterMaxHealth = firstFighter.health;
-            const secondFighterMaxHealth = secondFighter.health;
-            const firstFighterHealthPercentage = (firstFighterHealth / firstFighterMaxHealth) * 100;
-            const secondFighterHealthPercentage = (secondFighterHealth / secondFighterMaxHealth) * 100;
+            const leftBar = document.getElementById('left-fighter-indicator');
+            const rightBar = document.getElementById('right-fighter-indicator');
+            const maxHealthFighter1 = firstFighter.health;
+            const maxHealthFighter2 = secondFighter.health;
+            const percentFighter1 = (healthFighter1 / maxHealthFighter1) * 100;
+            const percentFighter2 = (healthFighter2 / maxHealthFighter2) * 100;
 
-            if (firstFighterHealthPercentage <= 0) {
-                firstFighterHealthBar.style.width = '0';
-            } else if (secondFighterHealthPercentage <= 0) {
-                secondFighterHealthBar.style.width = '0';
-            } else {
-                firstFighterHealthBar.style.width = `${firstFighterHealthPercentage}%`;
-                secondFighterHealthBar.style.width = `${secondFighterHealthPercentage}%`;
+            leftBar.style.width = percentFighter1 <= 0 ? '0' : `${percentFighter1}%`;
+            rightBar.style.width = percentFighter2 <= 0 ? '0' : `${percentFighter2}%`;
+        }
+
+        function handleCriticalHitKeyDown(code, isPressed) {
+            const indexPlayer1 = controls.PlayerOneCriticalHitCombination.indexOf(code);
+            const indexPlayer2 = controls.PlayerTwoCriticalHitCombination.indexOf(code);
+            const isBlockPlayer1 = controls.PlayerOneBlock.includes(code);
+            const isBlockPlayer2 = controls.PlayerTwoBlock.includes(code);
+
+            switch (true) {
+                case indexPlayer1 !== -1:
+                    criticalHitComboPlayer1[indexPlayer1] = isPressed;
+                    break;
+                case indexPlayer2 !== -1:
+                    criticalHitComboPlayer2[indexPlayer2] = isPressed;
+                    break;
+                case isBlockPlayer1:
+                    isBlockFighter1 = isPressed;
+                    break;
+                case isBlockPlayer2:
+                    isBlockFighter2 = isPressed;
+                    break;
+                default:
+                    break;
             }
         }
 
         function handleKeyDown(event) {
-            const key = event.code;
+            const { code } = event;
 
-            if (key === controls.PlayerOneAttack && !secondFighterIsBlock && !firstFighterIsBlock) {
-                const damage = getDamage(firstFighter, secondFighter);
-                secondFighterHealth -= damage;
-            } else if (key === controls.PlayerTwoAttack && !firstFighterIsBlock && !secondFighterIsBlock) {
-                const damage = getDamage(secondFighter, firstFighter);
-                firstFighterHealth -= damage;
-            } else if (key === controls.PlayerOneBlock) {
-                firstFighterIsBlock = true;
-            } else if (key === controls.PlayerTwoBlock) {
-                secondFighterIsBlock = true;
-            } else if (key === controls.PlayerOneCriticalHitCombination[0]) {
-                playerOneCriticalHitCombination[0] = true;
-            } else if (key === controls.PlayerOneCriticalHitCombination[1]) {
-                playerOneCriticalHitCombination[1] = true;
-            } else if (key === controls.PlayerOneCriticalHitCombination[2]) {
-                playerOneCriticalHitCombination[2] = true;
-            } else if (key === controls.PlayerTwoCriticalHitCombination[0]) {
-                playerTwoCriticalHitCombination[0] = true;
-            } else if (key === controls.PlayerTwoCriticalHitCombination[1]) {
-                playerTwoCriticalHitCombination[1] = true;
-            } else if (key === controls.PlayerTwoCriticalHitCombination[2]) {
-                playerTwoCriticalHitCombination[2] = true;
-            }
-
-            if (
-                playerOneCriticalHitCombination[0] &&
-                playerOneCriticalHitCombination[1] &&
-                playerOneCriticalHitCombination[2] &&
-                !firstFighterCriticalHit
-            ) {
-                const damage = 2 * firstFighter.attack;
-                secondFighterHealth -= damage;
-                firstFighterCriticalHit = true;
-                setTimeout(() => {
-                    firstFighterCriticalHit = false;
-                }, 10000);
-            }
-
-            if (
-                playerTwoCriticalHitCombination[0] &&
-                playerTwoCriticalHitCombination[1] &&
-                playerTwoCriticalHitCombination[2] &&
-                !secondFighterCriticalHit
-            ) {
-                const damage = 2 * secondFighter.attack;
-                firstFighterHealth -= damage;
-                secondFighterCriticalHit = true;
-                setTimeout(() => {
-                    secondFighterCriticalHit = false;
-                }, 10000);
-            }
-
+            handleCriticalHitKeyDown(code, true);
+            hadnlerHit(code);
             updateHealthBars();
         }
 
         function handleKeyUp(event) {
-            const key = event.code;
+            const { code } = event;
 
-            if (key === controls.PlayerOneBlock) {
-                firstFighterIsBlock = false;
-            } else if (key === controls.PlayerTwoBlock) {
-                secondFighterIsBlock = false;
-            } else if (key === controls.PlayerOneCriticalHitCombination[0]) {
-                playerOneCriticalHitCombination[0] = false;
-            } else if (key === controls.PlayerOneCriticalHitCombination[1]) {
-                playerOneCriticalHitCombination[1] = false;
-            } else if (key === controls.PlayerOneCriticalHitCombination[2]) {
-                playerOneCriticalHitCombination[2] = false;
-            } else if (key === controls.PlayerTwoCriticalHitCombination[0]) {
-                playerTwoCriticalHitCombination[0] = false;
-            } else if (key === controls.PlayerTwoCriticalHitCombination[1]) {
-                playerTwoCriticalHitCombination[1] = false;
-            } else if (key === controls.PlayerTwoCriticalHitCombination[2]) {
-                playerTwoCriticalHitCombination[2] = false;
-            }
+            handleCriticalHitKeyDown(code, false);
 
-            if (firstFighterHealth <= 0 || secondFighterHealth <= 0) {
+            if (healthFighter1 <= 0 || healthFighter2 <= 0) {
                 document.removeEventListener('keydown', handleKeyDown);
                 document.removeEventListener('keyup', handleKeyUp);
-                resolve(firstFighterHealth > secondFighterHealth ? firstFighter : secondFighter);
+
+                determineWinner();
             }
         }
 
