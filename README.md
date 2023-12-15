@@ -1,4 +1,4 @@
-# Street Fighter game
+# Street Fighter game [DEMOLINK](https://vladislav-burhovetskiy.github.io/sf-game-js/)
 I added the following functionality:
 - selection of fighters;
 - receiving detailed information about the soldier;
