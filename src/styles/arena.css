@@ -61,3 +61,50 @@
   width: 100%;
   background-color: #ebd759;
 }
+
+/* fighters combo info */
+
+.arena___fight-combo {
+  display: flex;
+  justify-content: space-between;
+  transform: translateY(-80%)
+}
+
+.arena___fighter-combo {
+  color: #ffdfa7;
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px black;
+  box-shadow: 1px 1px 10px grey;
+  border-radius: 10px;
+  padding: 10px 20px;
+  text-align: center;
+}
+
+.arena___fighter-combo-right {
+  text-align: center;
+}
+
+.arena___fighter-combo span {
+  color: white;
+  font-size: 1.2rem;
+}
+
+.arena___fighter-combo p:first-child {
+  font-size: 0.9rem;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.arena___fighter-combo p:nth-child(2) {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.arena___fighter-combo p:nth-child(2) span {
+  color: red;
+  font-size: 1rem;
+  background: radial-gradient(circle, hsla(0, 98%, 50%, 0.1) 56%, hsla(180, 3%, 8%, 1) 100%);
+  padding: 0 7px;
+  border-radius: 3px;
+}

@@ -52,12 +52,42 @@ function createHealthIndicators(leftFighter, rightFighter) {
     return healthIndicators;
 }
 
+// fight combintations
+function createFighterCombo(fighter, position) {
+    const fighterComboInfo = createElement({
+        tagName: 'div',
+        className: `arena___fighter-combo`
+    });
+
+    fighterComboInfo.innerHTML = `
+        <p>${fighter.name}</p>
+        <p><span>COMBO:</span></p>
+        <p>Hit: <span>${position === 'left' ? 'A' : 'J'}</span></p>
+        <p>Super hit: <span>${position === 'left' ? 'QWE' : 'UIO'}</span></p>
+        <p>Block: <span>${position === 'left' ? 'D' : 'L'}</span></p>
+    `;
+
+    return fighterComboInfo;
+}
+
+function createFightersCombo(leftFighter, rightFighter) {
+    const fightersCombo = createElement({ tagName: 'div', className: 'arena___fight-combo' });
+    const leftFighterCombo = createFighterCombo(leftFighter, 'left');
+    const rightFighterCombo = createFighterCombo(rightFighter, 'right');
+
+    fightersCombo.append(leftFighterCombo, rightFighterCombo);
+    return fightersCombo;
+}
+
 function createArena(selectedFighters) {
     const arena = createElement({ tagName: 'div', className: 'arena___root' });
     const healthIndicators = createHealthIndicators(...selectedFighters);
     const fighters = createFighters(...selectedFighters);
 
-    arena.append(healthIndicators, fighters);
+    // create fighters combo info
+    const fightersCombo = createFightersCombo(...selectedFighters);
+
+    arena.append(healthIndicators, fighters, fightersCombo);
     return arena;
 }
 
